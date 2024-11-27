@@ -1,0 +1,62 @@
+# Estrutura para armazenar transações
+transacoes = []  # Lista para armazenar transações
+
+def adicionar_transacao():
+    try:
+        data = input("Digite a data (dd/mm/aa): ")
+        descricao = input("Digite a descrição da transação: ").strip()
+        tipo = input("Digite o tipo (Receita/Despesa): ").strip().capitalize()
+        
+        # Validar o tipo
+        if tipo not in ["Receita", "Despesa"]:
+            print("Tipo inválido! Use 'Receita' ou 'Despesa'.")
+            return
+        
+        # Validar o valor
+        valor = float(input("Digite o valor (use valores negativos para despesas, se preferir): "))
+        if tipo == "Despesa" and valor > 0:
+            valor = -valor  # Garantir que despesas sejam negativas
+        
+        # Adicionar transação à lista
+        transacoes.append({"Data": data, "Descrição": descricao, "Tipo": tipo, "Valor": valor})
+        print("Transação adicionada com sucesso!")
+    except ValueError:
+        print("Erro: Valor inválido. Certifique-se de digitar um número válido.")
+
+def calcular_saldo():
+    saldo = sum(t['Valor'] for t in transacoes)
+    print(f"\nSaldo atual: R$ {saldo:.2f}")
+
+def listar_transacoes():
+    if not transacoes:
+        print("\nNenhuma transação registrada.")
+        return
+
+    print("\n--- Lista de Transações ---")
+    for t in transacoes:
+        print(f"{t['Data']} - {t['Descrição']} - {t['Tipo']} - R$ {t['Valor']:.2f}")
+    print("---------------------------")
+
+def menu():
+    while True:
+        print("\n--- Menu ---")
+        print("1. Adicionar Transação")
+        print("2. Calcular Saldo")
+        print("3. Listar Transações")
+        print("4. Sair")
+        opcao = input("Escolha uma opção: ").strip()
+        if opcao == "1":
+            adicionar_transacao()
+        elif opcao == "2":
+            calcular_saldo()
+        elif opcao == "3":
+            listar_transacoes()
+        elif opcao == "4":
+            print("Saindo... Até logo!")
+            break
+        else:
+            print("Opção inválida! Tente novamente.")
+
+# Inicia o programa
+if __name__ == "__main__":
+    menu()
